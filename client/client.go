@@ -45,8 +45,8 @@ func main() {
 
 	// PrintService
 	msg := "Hello world !"
-	rep := 0
-	err = client.Call("PrintService.Print", &msg, &rep)
+
+	err = client.Call("PrintService.Print", &msg, &struct{}{})
 	if err != nil {
 		log.Fatal("calling print:", err)
 	} else {
@@ -71,8 +71,7 @@ func main() {
 
 	// kill server
 	when = time.Millisecond * 2000
-	rep = 0
-	err = client.Call("ShutDownService.Close", &when, &rep)
+	err = client.Call("ShutDownService.Close", &when, &struct{}{})
 	if err != nil {
 		log.Fatal("calling close", err)
 	}

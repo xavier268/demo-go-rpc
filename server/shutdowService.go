@@ -7,7 +7,7 @@ import (
 
 type ShutDownService struct{}
 
-func (*ShutDownService) Close(when *time.Duration, ignore *int) error {
+func (*ShutDownService) Close(when *time.Duration, _ *struct{}) error {
 	go func() {
 
 		fmt.Println("killing server in ", when)
