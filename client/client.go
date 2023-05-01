@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/rpc"
+	"time"
 
 	"github.com/xavier268/demo-go-rpc/models"
 )
@@ -21,14 +22,14 @@ func main() {
 	a := models.Args{A: 7, B: 8}
 	reply := new(models.Quotient)
 	// NB : Note that the full service name to use is TYPE.METHOD, not just METHOD !
-	err = client.Call("Arith.Divide", &a, reply)
+	err = client.Call("ArithService.Divide", &a, reply)
 	if err != nil {
 		log.Fatal("calling arith :", err)
 	}
 	fmt.Println(a, " ---> ", *reply)
 
 	// twice !
-	err = client.Call("Arith.Divide", &a, nil)
+	err = client.Call("ArithService.Divide", &a, reply)
 	if err != nil {
 		log.Fatal("calling arith :", err)
 	}
@@ -47,10 +48,18 @@ func main() {
 	// make a sync call for arith
 	a.A = 50
 	// NB : Note that the full service name to use is TYPE.METHOD, not just METHOD !
-	err = client.Call("Arith.Divide", &a, reply)
+	err = client.Call("ArithService.Divide", &a, reply)
 	if err != nil {
 		log.Fatal("calling arith :", err)
 	}
 	fmt.Println(a, " ---> ", *reply)
+
+	// kill server
+	when := time.Millisecond * 2000
+	rep = 0
+	err = client.Call("ShutDownService.Close", &when, &rep)
+	if err != nil {
+		log.Fatal("calling close", err)
+	}
 
 }
