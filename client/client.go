@@ -62,6 +62,9 @@ func main() {
 	}
 	fmt.Println(a, " ---> ", *reply)
 
+	// slow the client ...
+	time.Sleep(time.Second / 50)
+
 	// Arm wtchdog
 	when = time.Second / 10
 	err = client.Call("WatchdogService.Arm", &when, new(struct{}))
@@ -73,7 +76,11 @@ func main() {
 	when = time.Millisecond * 2000
 	err = client.Call("ShutDownService.Close", &when, &struct{}{})
 	if err != nil {
-		log.Fatal("calling close", err)
+		log.Fatal("calling server close", err)
 	}
+
+	// close client
+	fmt.Println("Closing client")
+	client.Close()
 
 }
