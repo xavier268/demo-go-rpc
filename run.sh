@@ -5,7 +5,11 @@ go run ./server/ &
 
 sleep 1
 
-echo "Launching client"
-go run ./client/
+echo "Launching client 1"
+go run ./client/ &
 
-echo "Client closed"
+
+
+echo "Launching client 2"
+go run ./client/ &
+
