@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 type WatchdogService struct{}
 
 var ticker *time.Ticker
+var tickerGuard sync.Mutex
+
 var defaultDuration = time.Second * 10
 
 func init() {
@@ -28,6 +31,8 @@ func init() {
 // Arm will set up the watchdog. If no ping received during a duration intervall, triggers event ..
 func (wd *WatchdogService) Arm(dur *time.Duration, _ *struct{}) error {
 	fmt.Println("Changing ticker to ", *dur)
+	tickerGuard.Lock()
 	ticker.Reset(*dur)
+	tickerGuard.Unlock()
 	return nil
 }
