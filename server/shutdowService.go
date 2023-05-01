@@ -12,7 +12,7 @@ func (*ShutDownService) Close(when *time.Duration, ignore *int) error {
 
 		fmt.Println("killing server in ", when)
 		time.Sleep(*when)
-		listener.Close()
+		rpcListener.Close()
 	}()
 	return nil
 }

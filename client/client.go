@@ -28,6 +28,14 @@ func main() {
 	}
 	fmt.Println(a, " ---> ", *reply)
 
+	// Arm wtchdog
+	when := time.Second / 100_000
+
+	err = client.Call("WatchdogService.Arm", &when, new(struct{}))
+	if err != nil {
+		log.Fatal("calling watchdog.arm :", err)
+	}
+
 	// twice !
 	err = client.Call("ArithService.Divide", &a, reply)
 	if err != nil {
@@ -54,8 +62,15 @@ func main() {
 	}
 	fmt.Println(a, " ---> ", *reply)
 
+	// Arm wtchdog
+	when = time.Second / 10
+	err = client.Call("WatchdogService.Arm", &when, new(struct{}))
+	if err != nil {
+		log.Fatal("calling watchdog.arm :", err)
+	}
+
 	// kill server
-	when := time.Millisecond * 2000
+	when = time.Millisecond * 2000
 	rep = 0
 	err = client.Call("ShutDownService.Close", &when, &rep)
 	if err != nil {
